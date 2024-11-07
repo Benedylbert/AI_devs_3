@@ -1,56 +1,12 @@
 import { OpenAIService } from "../OpenAIService";
 import type OpenAI from "openai";
 import { prompt } from "./prompt";
+import { httpGET, httpPOST, httpRequest } from "../httpRequest";
+import type { SecretFile, TestData, AnswerFile } from "./model";
 
 const openaiService = new OpenAIService();
 
-interface TestData {
-  question: string;
-  answer: number;
-  test?: {
-    q: string;
-    a: string | null;
-  };
-}
-
-interface SecretFile {
-  apikey: string;
-  description: string;
-  copyright: string;
-  "test-data": TestData[];
-}
-
-interface AnswerFile {
-  task: string;
-  apikey: string;
-  answer: SecretFile;
-}
-
-const httpRequest = async <T>(
-  method: "POST" | "GET" = "GET",
-  url: string,
-  data?: Record<string, any>
-): Promise<T> => {
-  const body = data && JSON.stringify(data);
-
-  const response = await fetch(url, {
-    method,
-    body,
-  });
-  const responseText = await response.text();
-  const responseObject = JSON.parse(responseText);
-
-  return responseObject;
-};
-
 const API_KEY = process.env.CENTRALA_KEY!;
-
-const getSecretFile = () => {
-  return httpRequest<SecretFile>(
-    "GET",
-    `https://centrala.ag3nts.org/data/${API_KEY}/json.txt`
-  );
-};
 
 const askAI = async (question: string) => {
   const assistantResponse = (await openaiService.completion(
@@ -90,7 +46,7 @@ const fixTestData = async (testData: TestData[]) => {
 
 async function main() {
   try {
-    const data = await getSecretFile();
+    const data = await httpGET<SecretFile>(`https://centrala.ag3nts.org/data/${API_KEY}/json.txt`);
 
     const fixedData: AnswerFile = {
       task: "JSON",
@@ -103,8 +59,7 @@ async function main() {
       },
     };
 
-    const response = await httpRequest(
-      "POST",
+    const response = await httpPOST(
       "https://centrala.ag3nts.org/report",
       fixedData
     );
