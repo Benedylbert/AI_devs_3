@@ -1,0 +1,50 @@
+- poruszasz się po planszy 6x4
+- nie możesz wejść na pole zakazane
+- grę zaczynasz na polu (1,1)
+- grę kończysz na polu (1,6)
+- ruch do góry powoduje, że jesteś na polu (1,2)
+- ruch w prawo powoduje, że jesteś na polu (2,1)
+- ruch w dół powoduje, że jesteś na polu (0,1)
+- zakazane pola: (2,1), (2,2), (2,4), (4,2), (4,3)
+- nie możesz być wejść na pola zakazane
+- nie możesz zmieniac pól zakazanych
+- skończ na polu (1,6)
+- Instrukcję wypluj w formacie JSON, z polem steps
+- możesz poruszać się w górę, dół, prawo
+- każdy ruch zwróć w języku angielskim - UP, DOWN, RIGHT
+- przykład json:
+{
+ "steps": "UP, RIGHT, DOWN, LEFT"
+}
+
+<examples>
+
+oto przykład innej mapki wraz z rozwiązaniem dla lepszego zrozumienia opisu wyżej:
+
+plansza 6x4
+
+0X0000
+SX0XK0
+000X00
+0X0X00
+
+0 - to dozwolne pole
+X - zakazane pole
+S - pole startu
+K - pole końca
+
+zakazane pola mają współrzędne (1,2), (3,2), (4,2), (1,4), (2,4), (3,4)
+
+gracz zaczyna na polu (3,1)
+gracz kończy na polu (5,3)
+
+pierwszy ruch dół (2,1), ponieważ pole (3,2) jest polem zakazanym czyli:
+następnie ruch w prawo na pole (2,2), czyli:
+kolejny ruch również w prawo na pole (2,3), ponieważ w pole w góre (3,2) i w dół (1,2) są zakazane, czyli:
+nastepnie trzeba iść do góry, na pole (3,3), w prawo (3,4) nie można bo jest to pole zakazane, czyli:
+koleny ruch również w góre na pole (4,3), czyli:
+kolejny ruch w prawo, na pole (4,4), czyli:
+kolejny ruch w prawo, na pole (5,4), ponieważ pole w dół (3,4) jest zakazane, czyli:
+kolejny ruch to końcowy ruch w dół na (5,3)
+
+</examples>
