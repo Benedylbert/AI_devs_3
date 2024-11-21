@@ -1,0 +1,58 @@
+import OpenAI, { toFile } from "openai";
+import type { ChatCompletionMessageParam } from "openai/resources/chat/completions";
+import fs from 'fs/promises';
+
+export interface ImageProcessingResult {
+  description: string;
+  source: string;
+}
+
+export class OpenAIService {
+  private openai: OpenAI;
+
+  constructor() {
+    this.openai = new OpenAI();
+  }
+
+  // async completion(config: {
+  //   messages: ChatCompletionMessageParam[],
+  //   model?: string,
+  //   stream?: boolean,
+  //   jsonMode?: boolean,
+  //   maxTokens?: number
+  // }): Promise<OpenAI.Chat.Completions.ChatCompletion | AsyncIterable<OpenAI.Chat.Completions.ChatCompletionChunk>> {
+  //   const { messages, model = "gpt-4o", stream = false, jsonMode = false, maxTokens = 4096 } = config;
+  //   try {
+  //     const chatCompletion = await this.openai.chat.completions.create({
+  //       messages,
+  //       model,
+  //       ...(model !== 'o1-mini' && model !== 'o1-preview' && {
+  //         stream,
+  //         max_tokens: maxTokens,
+  //         response_format: jsonMode ? { type: "json_object" } : { type: "text" }
+  //       })
+  //     });
+      
+  //     return stream
+  //       ? chatCompletion as AsyncIterable<OpenAI.Chat.Completions.ChatCompletionChunk>
+  //       : chatCompletion as OpenAI.Chat.Completions.ChatCompletion;
+  //   } catch (error) {
+  //     console.error("Error in OpenAI completion:", error);
+  //     throw error;
+  //   }
+  // }
+
+  async completion(messages: ChatCompletionMessageParam[], model: string = "gpt-4o") {
+    try {
+      const chatCompletion = await this.openai.chat.completions.create({
+        messages,
+        model,
+      });
+      return chatCompletion;
+    } catch (error) {
+      console.error("Error in OpenAI completion:", error);
+      throw error;
+    }
+  }
+
+}
